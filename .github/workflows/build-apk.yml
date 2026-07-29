@@ -1,0 +1,26 @@
+Microsoft Windows [版本 10.0.26200.8875]
+(c) Microsoft Corporation. 著作權所有，並保留一切權利。
+
+C:\Users\user>git -C D:\TaiwanMahjongVision remote add origin https://github.com/PatrickHung731/TaiwanMahjongVision.git
+
+C:\Users\user>git -C D:\TaiwanMahjongVision push -u origin main
+remote: Repository not found.
+fatal: repository 'https://github.com/PatrickHung731/TaiwanMahjongVision.git/' not found
+
+C:\Users\user>git -C D:\TaiwanMahjongVision remote add origin https://github.com/PatrickHung731/TaiwanMahjongVision.git
+error: remote origin already exists.
+
+C:\Users\user>git -C D:\TaiwanMahjongVision push -u origin main
+Enumerating objects: 87, done.
+Counting objects: 100% (87/87), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (66/66), done.
+Writing objects: 100% (87/87), 94.15 KiB | 5.54 MiB/s, done.
+Total 87 (delta 4), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (4/4), done.
+To https://github.com/PatrickHung731/TaiwanMahjongVision.git
+ ! [remote rejected] main -> main (refusing to allow a Personal Access Token to create or update workflow `.github/workflows/build-apk.yml` without `workflow` scope)
+error: failed to push some refs to 'https://github.com/PatrickHung731/TaiwanMahjongVision.git'
+
+C:\Users\user>
+
