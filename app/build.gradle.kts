@@ -4,6 +4,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+// 版本號直接取自 GitHub Actions，讓 App 自己講得出它是哪一次 build 出來的。
+// 之前發生過「下載到舊的 APK 卻以為是新版」，光看畫面分不出來，很浪費時間。
+val buildNumber = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 0
+val commitSha = System.getenv("GITHUB_SHA")?.take(7) ?: "local"
+
 android {
     namespace = "com.tmvision.mahjong"
     compileSdk = 35
@@ -12,8 +17,8 @@ android {
         applicationId = "com.tmvision.mahjong"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1-manual"
+        versionCode = if (buildNumber > 0) buildNumber else 1
+        versionName = if (buildNumber > 0) "b$buildNumber · $commitSha" else "本機開發版"
     }
 
     buildTypes {
@@ -38,6 +43,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true        // 要在畫面上顯示版本，需要產生 BuildConfig
     }
 
     sourceSets["main"].java.srcDirs("src/main/kotlin")

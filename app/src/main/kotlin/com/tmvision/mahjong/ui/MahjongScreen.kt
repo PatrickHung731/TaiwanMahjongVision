@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tmvision.engine.PlayStyle
@@ -41,6 +42,7 @@ import com.tmvision.engine.Seat
 import com.tmvision.engine.TileRecommendation
 import com.tmvision.engine.Tiles
 import com.tmvision.mahjong.AdviceState
+import com.tmvision.mahjong.BuildConfig
 import com.tmvision.mahjong.InputTarget
 import com.tmvision.mahjong.MahjongViewModel
 
@@ -115,6 +117,14 @@ private fun HeaderRow(viewModel: MahjongViewModel) {
         StepperButton("−") { viewModel.adjustTurn(-1) }
         StepperButton("＋") { viewModel.adjustTurn(1) }
     }
+    // 版本號。用來確認手機上跑的到底是不是剛下載的那一版
+    Text(
+        text = "版本 ${BuildConfig.VERSION_NAME}",
+        fontSize = 9.sp,
+        color = MaterialTheme.colorScheme.outline,
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.End,
+    )
 }
 
 // ----------------------------------------------------------------------
