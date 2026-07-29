@@ -303,9 +303,14 @@ private fun CurrentContent(viewModel: MahjongViewModel) {
                     InputTarget.MY_RIVER -> viewModel.myRiver
                     else -> viewModel.rivers[target.seat] ?: emptyList()
                 }
-                Text("${target.label} ${river.size} 張（依打出順序）", fontSize = 11.sp)
+                Text("${target.label} ${river.size} 張", fontSize = 11.sp)
                 Spacer(Modifier.height(4.dp))
-                TileChips(river) { index -> viewModel.removeFromRiver(target, index) }
+                // 畫面上照牌序排好比較好核對；底層仍然保留打出順序，
+                // 之後要用「早巡打的 vs 晚巡打的」做更細的危險度判斷時還在。
+                val ordered = river.withIndex().sortedBy { it.value }
+                TileChips(ordered.map { it.value }) { position ->
+                    viewModel.removeFromRiver(target, ordered[position].index)
+                }
             }
         }
     }
