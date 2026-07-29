@@ -303,17 +303,14 @@ private fun CurrentContent(viewModel: MahjongViewModel) {
                     InputTarget.MY_RIVER -> viewModel.myRiver
                     else -> viewModel.rivers[target.seat] ?: emptyList()
                 }
-                Text("${target.label} ${river.size} 張（小字＝第幾張打的）", fontSize = 11.sp)
+                Text("${target.label} ${river.size} 張（依打出順序）", fontSize = 11.sp)
                 Spacer(Modifier.height(4.dp))
-                // 照牌序排好比較好核對，但每張下面標出它是第幾張打的，
-                // 這樣「先打什麼、後打什麼」照樣看得出來——晚巡才打的中張才是危險訊號。
-                val ordered = river.withIndex().sortedBy { it.value }
+                // 照打出順序排，跟牌桌上真實的牌河擺法一致，對照起來最快。
+                // 小字是第幾張打的，晚巡才打的中張是危險訊號。
                 TileChips(
-                    tiles = ordered.map { it.value },
-                    subLabels = ordered.map { "${it.index + 1}" },
-                ) { position ->
-                    viewModel.removeFromRiver(target, ordered[position].index)
-                }
+                    tiles = river,
+                    subLabels = river.indices.map { "${it + 1}" },
+                ) { index -> viewModel.removeFromRiver(target, index) }
             }
         }
     }
