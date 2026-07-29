@@ -86,7 +86,7 @@ private fun HeaderRow(viewModel: MahjongViewModel) {
         PlayStyle.entries.forEach { style ->
             FilterChip(
                 selected = viewModel.style == style,
-                onClick = { viewModel.setStyle(style) },
+                onClick = { viewModel.selectStyle(style) },
                 label = { Text(style.display, fontSize = 13.sp) },
                 modifier = Modifier.padding(end = 4.dp),
             )
@@ -224,7 +224,7 @@ private fun InputSection(viewModel: MahjongViewModel) {
         InputTarget.entries.forEach { target ->
             FilterChip(
                 selected = viewModel.target == target,
-                onClick = { viewModel.setTarget(target) },
+                onClick = { viewModel.selectTarget(target) },
                 label = { Text(target.label, fontSize = 11.sp) },
                 modifier = Modifier.padding(end = 3.dp),
             )

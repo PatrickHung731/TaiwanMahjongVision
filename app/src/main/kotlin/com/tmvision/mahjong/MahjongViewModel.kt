@@ -168,11 +168,13 @@ class MahjongViewModel : ViewModel() {
         }
     }
 
-    fun setTarget(value: InputTarget) {
+    // 不能叫 setTarget / setStyle：`var target by mutableStateOf(...)` 已經產生了
+    // JVM 上的 setTarget()，同名函式會撞簽章（Platform declaration clash）。
+    fun selectTarget(value: InputTarget) {
         target = value
     }
 
-    fun setStyle(value: PlayStyle) {
+    fun selectStyle(value: PlayStyle) {
         style = value
     }
 
