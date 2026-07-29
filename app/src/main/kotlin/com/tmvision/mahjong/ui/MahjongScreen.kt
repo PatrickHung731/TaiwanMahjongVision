@@ -44,6 +44,11 @@ import com.tmvision.mahjong.AdviceState
 import com.tmvision.mahjong.InputTarget
 import com.tmvision.mahjong.MahjongViewModel
 
+// 候選表的欄寬。標題與資料列共用同一組常數，改標題文字時不會跑版。
+private val COLUMN_TILE = 44.dp
+private val COLUMN_SHANTEN = 52.dp
+private val COLUMN_ACCEPTANCE = 62.dp
+
 /** 畫面上三家的排列順序：照實際出牌順序，不是照 Seat 的宣告順序 */
 private val SEAT_DISPLAY_ORDER = listOf(Seat.RIGHT, Seat.ACROSS, Seat.LEFT)
 
@@ -186,9 +191,9 @@ private fun CandidateTable(recommendations: List<TileRecommendation>, hasOpponen
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(horizontal = 10.dp, vertical = 6.dp)) {
             Row(Modifier.fillMaxWidth()) {
-                Text("丟", fontSize = 11.sp, modifier = Modifier.width(44.dp))
-                Text("向聽", fontSize = 11.sp, modifier = Modifier.width(40.dp))
-                Text("進張", fontSize = 11.sp, modifier = Modifier.width(44.dp))
+                Text("丟", fontSize = 11.sp, modifier = Modifier.width(COLUMN_TILE))
+                Text("幾進聽", fontSize = 11.sp, modifier = Modifier.width(COLUMN_SHANTEN))
+                Text("進張機會", fontSize = 11.sp, modifier = Modifier.width(COLUMN_ACCEPTANCE))
                 Text(if (hasOpponentInfo) "放槍" else "放槍(無牌河)", fontSize = 11.sp)
             }
             HorizontalDivider(Modifier.padding(vertical = 3.dp))
@@ -198,10 +203,10 @@ private fun CandidateTable(recommendations: List<TileRecommendation>, hasOpponen
                         item.discardName,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.width(44.dp),
+                        modifier = Modifier.width(COLUMN_TILE),
                     )
-                    Text("${item.shantenAfter}", fontSize = 14.sp, modifier = Modifier.width(40.dp))
-                    Text("${item.acceptanceTiles}", fontSize = 14.sp, modifier = Modifier.width(44.dp))
+                    Text("${item.shantenAfter}", fontSize = 14.sp, modifier = Modifier.width(COLUMN_SHANTEN))
+                    Text("${item.acceptanceTiles}", fontSize = 14.sp, modifier = Modifier.width(COLUMN_ACCEPTANCE))
                     if (hasOpponentInfo) {
                         Text(
                             text = item.riskPercent,
