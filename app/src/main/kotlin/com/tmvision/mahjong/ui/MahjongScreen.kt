@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -55,6 +57,7 @@ fun MahjongScreen(viewModel: MahjongViewModel) {
         Column(
             modifier = Modifier
                 .padding(padding)
+                .statusBarsPadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 8.dp),
         ) {
@@ -236,7 +239,7 @@ private fun InputSection(viewModel: MahjongViewModel) {
 
     Spacer(Modifier.height(6.dp))
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Text("我的副露 ${viewModel.meldedSets} 組", fontSize = 12.sp)
+        Text("我吃碰槓 ${viewModel.meldedSets} 組", fontSize = 12.sp)
         StepperButton("−") { viewModel.adjustMelded(-1) }
         StepperButton("＋") { viewModel.adjustMelded(1) }
         Spacer(Modifier.width(10.dp))
@@ -248,7 +251,7 @@ private fun InputSection(viewModel: MahjongViewModel) {
     Seat.entries.forEach { seat ->
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                "${seat.display}副露 ${viewModel.opponentMelds[seat] ?: 0} 組",
+                "${seat.display}吃碰槓 ${viewModel.opponentMelds[seat] ?: 0} 組",
                 fontSize = 12.sp,
             )
             StepperButton("−") { viewModel.adjustOpponentMelds(seat, -1) }
@@ -333,7 +336,13 @@ private fun TileChips(tiles: List<Int>, onRemove: (Int) -> Unit) {
 @Composable
 private fun TileKeyboard(viewModel: MahjongViewModel) {
     Surface(tonalElevation = 3.dp) {
-        Column(Modifier.padding(horizontal = 4.dp, vertical = 4.dp)) {
+        // targetSdk 35 在 Android 15+ 會強制 edge-to-edge，畫面會延伸到系統列底下。
+        // 沒有這個 padding，字牌那一排會被導覽列蓋住。
+        Column(
+            Modifier
+                .navigationBarsPadding()
+                .padding(horizontal = 4.dp, vertical = 4.dp),
+        ) {
             SuitRow("萬", Tiles.MAN_START, 9, viewModel)
             SuitRow("筒", Tiles.PIN_START, 9, viewModel)
             SuitRow("條", Tiles.SOU_START, 9, viewModel)

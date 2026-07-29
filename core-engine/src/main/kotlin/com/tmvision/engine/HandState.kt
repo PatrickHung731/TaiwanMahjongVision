@@ -67,7 +67,7 @@ class HandState(
     /** 檢查張數是否符合台灣 16 張規則，不符合就丟出清楚的錯誤訊息 */
     fun requireValidSize() {
         require(isValidSize) {
-            "手牌張數不合法：副露 $meldedSets 組時應為 $restSize 張（待摸）或 ${restSize + 1} 張（待切），" +
+            "手牌張數不合法：吃碰槓 $meldedSets 組時應為 $restSize 張（待摸）或 ${restSize + 1} 張（待切），" +
                 "實際為 $tileCount 張 —— ${Tiles.format(concealed)}"
         }
     }
