@@ -89,7 +89,7 @@ class DiscardAdvisorTest {
         val advice = advisor.advise(midGameTable(), PlayStyle.BALANCED)
         val text = advice.overlayText()
 
-        assertContains(text, "建議切牌：")
+        assertContains(text, "建議丟牌：")
         assertContains(text, "放槍")
         assertContains(text, "%")
         println(text)

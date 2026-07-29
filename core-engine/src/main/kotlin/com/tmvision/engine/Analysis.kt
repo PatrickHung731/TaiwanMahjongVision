@@ -32,7 +32,7 @@ data class DiscardOption(
     val discardName: String get() = Tiles.displayName(discard)
 
     override fun toString(): String =
-        "切$discardName → ${shantenAfter}向聽, 進張 $acceptanceTiles 張 ${acceptance.joinToString(", ")}"
+        "丟$discardName →${shantenAfter}向聽, 進張 $acceptanceTiles 張 ${acceptance.joinToString(", ")}"
 }
 
 /**
@@ -66,8 +66,8 @@ data class HandAnalysis(
     /**
      * AR 覆蓋層用的單行提示，例如：
      * ```
-     * 建議切牌：9條 | 聽牌進張：3筒, 6筒 (剩餘 5 張)
-     * 建議切牌：1筒 | 1向聽進張：2筒, 3筒, 6筒 (剩餘 35 張)
+     * 建議丟牌：9條 | 聽牌進張：3筒, 6筒 (剩餘 5 張)
+     * 建議丟牌：1筒 | 1向聽進張：2筒, 3筒, 6筒 (剩餘 35 張)
      * 聽牌！進張：3筒, 6筒 (剩餘 7 張)
      * ```
      */
@@ -75,7 +75,7 @@ data class HandAnalysis(
         if (isWinning) return "🎉 已胡牌！"
         val best = bestDiscard
         if (best != null) {
-            val head = "建議切牌：${best.discardName}"
+            val head = "建議丟牌：${best.discardName}"
             if (best.acceptance.isEmpty()) return "$head | 無有效進張"
             val label = if (best.isTenpai) "聽牌進張" else "${best.shantenAfter}向聽進張"
             return "$head | $label：${tileList(best.acceptance, maxTiles)} (剩餘 ${best.acceptanceTiles} 張)"

@@ -39,7 +39,7 @@ data class TileRecommendation(
     val riskPercent: String get() = "%.1f%%".format(dealInRisk * 100)
 
     override fun toString(): String =
-        "切$discardName → ${shantenAfter}向聽, 進張 $acceptanceTiles 張, 放槍 $riskPercent"
+        "丟$discardName →${shantenAfter}向聽, 進張 $acceptanceTiles 張, 放槍 $riskPercent"
 }
 
 /**
@@ -60,7 +60,7 @@ data class TableAdvice(
     /**
      * AR 覆蓋層用的單行提示，例如：
      * ```
-     * 建議切牌：9條 (放槍 1.8%) | 聽牌進張：3筒, 6筒 (剩餘 5 張)
+     * 建議丟牌：9條 (放槍 1.8%) | 聽牌進張：3筒, 6筒 (剩餘 5 張)
      * ```
      */
     fun overlayText(maxTiles: Int = 6): String {
@@ -68,7 +68,7 @@ data class TableAdvice(
         val best = best ?: return analysis.overlayText(maxTiles)
 
         val risk = if (hasOpponentInfo) " (放槍 ${best.riskPercent})" else ""
-        val head = "建議切牌：${best.discardName}$risk"
+        val head = "建議丟牌：${best.discardName}$risk"
         if (best.acceptance.isEmpty()) return "$head | 無有效進張"
         val label = if (best.isTenpai) "聽牌進張" else "${best.shantenAfter}向聽進張"
         val tiles = best.acceptance.take(maxTiles).joinToString(", ") { it.name }
@@ -112,7 +112,7 @@ data class TableAdvice(
  * val advisor = DiscardAdvisor()
  * val advice = advisor.advise(table, PlayStyle.BALANCED)
  * println(advice.overlayText())
- * // 建議切牌：9條 (放槍 1.8%) | 聽牌進張：3筒, 6筒 (剩餘 5 張)
+ * // 建議丟牌：9條 (放槍 1.8%) | 聽牌進張：3筒, 6筒 (剩餘 5 張)
  * ```
  *
  * ## 分數怎麼算

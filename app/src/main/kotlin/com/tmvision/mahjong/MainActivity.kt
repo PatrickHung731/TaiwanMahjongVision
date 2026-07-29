@@ -9,8 +9,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tmvision.mahjong.ui.CameraScreen
 import com.tmvision.mahjong.ui.MahjongScreen
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +25,12 @@ class MainActivity : ComponentActivity() {
             MahjongTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val viewModel: MahjongViewModel = viewModel()
-                    MahjongScreen(viewModel)
+                    var showCamera by remember { mutableStateOf(false) }
+                    if (showCamera) {
+                        CameraScreen(viewModel, onClose = { showCamera = false })
+                    } else {
+                        MahjongScreen(viewModel, onOpenCamera = { showCamera = true })
+                    }
                 }
             }
         }

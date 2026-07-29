@@ -51,6 +51,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.9.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
 
     // 相機。刻意不加任何辨識框架（TFLite / OpenCV）——
     // 手牌是一列等寬的牌，用「對準框 + 等分切片」就能定位，不需要物件偵測模型。

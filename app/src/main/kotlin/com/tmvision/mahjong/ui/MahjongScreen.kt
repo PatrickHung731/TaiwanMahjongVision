@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
@@ -52,7 +53,7 @@ private fun riskColor(risk: Double): Color = when {
 }
 
 @Composable
-fun MahjongScreen(viewModel: MahjongViewModel) {
+fun MahjongScreen(viewModel: MahjongViewModel, onOpenCamera: () -> Unit = {}) {
     Scaffold(bottomBar = { TileKeyboard(viewModel) }) { padding ->
         Column(
             modifier = Modifier
@@ -70,6 +71,10 @@ fun MahjongScreen(viewModel: MahjongViewModel) {
                 CandidateTable(state.advice.recommendations, state.advice.hasOpponentInfo)
             }
             Spacer(Modifier.height(8.dp))
+            Button(onClick = onOpenCamera, modifier = Modifier.fillMaxWidth()) {
+                Text("用鏡頭辨識手牌")
+            }
+            Spacer(Modifier.height(4.dp))
             InputSection(viewModel)
             Spacer(Modifier.height(8.dp))
         }
@@ -178,7 +183,7 @@ private fun CandidateTable(recommendations: List<TileRecommendation>, hasOpponen
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(horizontal = 10.dp, vertical = 6.dp)) {
             Row(Modifier.fillMaxWidth()) {
-                Text("切", fontSize = 11.sp, modifier = Modifier.width(44.dp))
+                Text("丟", fontSize = 11.sp, modifier = Modifier.width(44.dp))
                 Text("向聽", fontSize = 11.sp, modifier = Modifier.width(40.dp))
                 Text("進張", fontSize = 11.sp, modifier = Modifier.width(44.dp))
                 Text(if (hasOpponentInfo) "放槍" else "放槍(無牌河)", fontSize = 11.sp)

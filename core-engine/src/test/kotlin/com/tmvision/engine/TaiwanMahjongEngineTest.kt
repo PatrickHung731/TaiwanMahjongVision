@@ -142,7 +142,7 @@ class TaiwanMahjongEngineTest {
 
         assertEquals(0, analysis.shanten)
         assertEquals(17, analysis.handSize)
-        assertEquals("建議切牌：9條 | 聽牌進張：3筒, 6筒 (剩餘 5 張)", analysis.overlayText())
+        assertEquals("建議丟牌：9條 | 聽牌進張：3筒, 6筒 (剩餘 5 張)", analysis.overlayText())
     }
 
     @Test
