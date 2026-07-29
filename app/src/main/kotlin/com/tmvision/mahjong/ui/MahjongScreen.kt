@@ -303,12 +303,15 @@ private fun CurrentContent(viewModel: MahjongViewModel) {
                     InputTarget.MY_RIVER -> viewModel.myRiver
                     else -> viewModel.rivers[target.seat] ?: emptyList()
                 }
-                Text("${target.label} ${river.size} 張", fontSize = 11.sp)
+                Text("${target.label} ${river.size} 張（小字＝第幾張打的）", fontSize = 11.sp)
                 Spacer(Modifier.height(4.dp))
-                // 畫面上照牌序排好比較好核對；底層仍然保留打出順序，
-                // 之後要用「早巡打的 vs 晚巡打的」做更細的危險度判斷時還在。
+                // 照牌序排好比較好核對，但每張下面標出它是第幾張打的，
+                // 這樣「先打什麼、後打什麼」照樣看得出來——晚巡才打的中張才是危險訊號。
                 val ordered = river.withIndex().sortedBy { it.value }
-                TileChips(ordered.map { it.value }) { position ->
+                TileChips(
+                    tiles = ordered.map { it.value },
+                    subLabels = ordered.map { "${it.index + 1}" },
+                ) { position ->
                     viewModel.removeFromRiver(target, ordered[position].index)
                 }
             }
@@ -316,9 +319,17 @@ private fun CurrentContent(viewModel: MahjongViewModel) {
     }
 }
 
-/** 一排可以點掉的牌 */
+/**
+ * 一排可以點掉的牌。
+ *
+ * @param subLabels 每張牌下面的小字（牌河用來標「第幾張打的」）；空的就不顯示
+ */
 @Composable
-private fun TileChips(tiles: List<Int>, onRemove: (Int) -> Unit) {
+private fun TileChips(
+    tiles: List<Int>,
+    subLabels: List<String> = emptyList(),
+    onRemove: (Int) -> Unit,
+) {
     if (tiles.isEmpty()) {
         Text("（空）點下面的牌面輸入", fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)
         return
@@ -328,7 +339,8 @@ private fun TileChips(tiles: List<Int>, onRemove: (Int) -> Unit) {
         Row(Modifier.fillMaxWidth().padding(vertical = 1.dp)) {
             chunk.forEachIndexed { columnIndex, tile ->
                 val index = rowIndex * 9 + columnIndex
-                Box(
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .padding(end = 3.dp)
                         .clip(RoundedCornerShape(4.dp))
@@ -337,6 +349,13 @@ private fun TileChips(tiles: List<Int>, onRemove: (Int) -> Unit) {
                         .padding(horizontal = 5.dp, vertical = 3.dp),
                 ) {
                     Text(Tiles.displayName(tile), fontSize = 13.sp)
+                    subLabels.getOrNull(index)?.let { order ->
+                        Text(
+                            text = order,
+                            fontSize = 9.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        )
+                    }
                 }
             }
         }
