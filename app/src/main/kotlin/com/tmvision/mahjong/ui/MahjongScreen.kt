@@ -44,6 +44,9 @@ import com.tmvision.mahjong.AdviceState
 import com.tmvision.mahjong.InputTarget
 import com.tmvision.mahjong.MahjongViewModel
 
+/** 手牌／牌河每一格的固定寬度。固定寬度上下行才會對齊 */
+private val TILE_CHIP_WIDTH = 34.dp
+
 // 候選表的欄寬。標題與資料列共用同一組常數，改標題文字時不會跑版。
 private val COLUMN_TILE = 44.dp
 private val COLUMN_SHANTEN = 52.dp
@@ -301,8 +304,7 @@ private fun CurrentContent(viewModel: MahjongViewModel) {
                     fontSize = 11.sp,
                 )
                 Spacer(Modifier.height(4.dp))
-                val tiles = (0 until Tiles.KINDS).flatMap { tile -> List(viewModel.hand[tile]) { tile } }
-                TileChips(tiles) { index -> viewModel.removeFromHand(tiles[index]) }
+                HandChips(viewModel.hand) { tile -> viewModel.removeFromHand(tile) }
             } else {
                 val river = when (target) {
                     InputTarget.MY_RIVER -> viewModel.myRiver
@@ -322,7 +324,46 @@ private fun CurrentContent(viewModel: MahjongViewModel) {
 }
 
 /**
- * 一排可以點掉的牌。
+ * 手牌顯示：**照花色換行**，同一種牌不會被拆到兩行。
+ *
+ * 固定每格寬度，所以上下行的欄位會對齊，一眼就能數清楚。
+ */
+@Composable
+private fun HandChips(hand: List<Int>, onRemove: (Int) -> Unit) {
+    val suits = listOf(0 until 9, 9 until 18, 18 until 27, 27 until Tiles.KINDS)
+    val rows = suits.flatMap { range ->
+        val tiles = range.flatMap { tile -> List(hand[tile]) { tile } }
+        // 一種花色超過 9 張（清一色之類）才折行，一般情況一個花色就是一行
+        if (tiles.isEmpty()) emptyList() else tiles.chunked(9)
+    }
+
+    if (rows.isEmpty()) {
+        Text("（空）點下面的牌面輸入", fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)
+        return
+    }
+
+    rows.forEach { row ->
+        Row(Modifier.fillMaxWidth().padding(vertical = 1.dp)) {
+            row.forEach { tile ->
+                Box(
+                    modifier = Modifier
+                        .padding(end = 3.dp)
+                        .width(TILE_CHIP_WIDTH)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .clickable { onRemove(tile) }
+                        .padding(vertical = 4.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(Tiles.displayName(tile), fontSize = 13.sp)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 一排可以點掉的牌（牌河用）。
  *
  * @param subLabels 每張牌下面的小字（牌河用來標「第幾張打的」）；空的就不顯示
  */
@@ -345,10 +386,11 @@ private fun TileChips(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .padding(end = 3.dp)
+                        .width(TILE_CHIP_WIDTH)
                         .clip(RoundedCornerShape(4.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                         .clickable { onRemove(index) }
-                        .padding(horizontal = 5.dp, vertical = 3.dp),
+                        .padding(vertical = 3.dp),
                 ) {
                     Text(Tiles.displayName(tile), fontSize = 13.sp)
                     subLabels.getOrNull(index)?.let { order ->
