@@ -16,13 +16,18 @@ import com.tmvision.engine.TableAdvice
 import com.tmvision.engine.TableState
 import com.tmvision.engine.Tiles
 
-/** 現在點牌面是要輸入到哪裡 */
+/**
+ * 現在點牌面是要輸入到哪裡。
+ *
+ * 順序刻意照**實際出牌的順序**排：你打完 → 下家 → 對家 → 上家 → 又輪到你。
+ * 這樣一輪打下來手指是往同一個方向移動，不用跳來跳去。
+ */
 enum class InputTarget(val label: String) {
     HAND("我的手牌"),
     MY_RIVER("我打過的"),
-    LEFT_RIVER("上家牌河"),
+    RIGHT_RIVER("下家牌河"),
     ACROSS_RIVER("對家牌河"),
-    RIGHT_RIVER("下家牌河");
+    LEFT_RIVER("上家牌河");
 
     /** 對應的座位；手牌與自己的牌河沒有座位 */
     val seat: Seat?

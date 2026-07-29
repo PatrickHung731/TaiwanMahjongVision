@@ -44,6 +44,9 @@ import com.tmvision.mahjong.AdviceState
 import com.tmvision.mahjong.InputTarget
 import com.tmvision.mahjong.MahjongViewModel
 
+/** 畫面上三家的排列順序：照實際出牌順序，不是照 Seat 的宣告順序 */
+private val SEAT_DISPLAY_ORDER = listOf(Seat.RIGHT, Seat.ACROSS, Seat.LEFT)
+
 /** 放槍機率的顏色分級——牌桌上要一眼看得出來，不能只給數字 */
 private fun riskColor(risk: Double): Color = when {
     risk < 0.01 -> Color(0xFF2E7D32)      // 綠：安全
@@ -253,7 +256,8 @@ private fun InputSection(viewModel: MahjongViewModel) {
         StepperButton("＋") { viewModel.adjustFlowers(1) }
     }
 
-    Seat.entries.forEach { seat ->
+    // 跟輸入目標一樣照出牌順序排：下家 → 對家 → 上家
+    SEAT_DISPLAY_ORDER.forEach { seat ->
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 "${seat.display}吃碰槓 ${viewModel.opponentMelds[seat] ?: 0} 組",
