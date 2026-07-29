@@ -60,7 +60,7 @@ data class TableAdvice(
     /**
      * AR 覆蓋層用的單行提示，例如：
      * ```
-     * 建議丟牌：9條 (放槍 1.8%) | 聽牌進張：3筒, 6筒 (剩餘 5 張)
+     * 建議丟牌：9條 (放槍 1.8%) | 聽牌 | 進張機會：3筒, 6筒 (剩餘 5 張)
      * ```
      */
     fun overlayText(maxTiles: Int = 6): String {
@@ -69,11 +69,11 @@ data class TableAdvice(
 
         val risk = if (hasOpponentInfo) " (放槍 ${best.riskPercent})" else ""
         val head = "建議丟牌：${best.discardName}$risk"
-        if (best.acceptance.isEmpty()) return "$head | 無有效進張"
-        val label = if (best.isTenpai) "聽牌進張" else "${best.shantenAfter}向聽進張"
+        val stage = if (best.isTenpai) "聽牌" else "${best.shantenAfter}步進聽"
+        if (best.acceptance.isEmpty()) return "$head | $stage | 無進張機會"
         val tiles = best.acceptance.take(maxTiles).joinToString(", ") { it.name }
         val suffix = if (best.acceptance.size > maxTiles) "…等${best.acceptance.size}種" else ""
-        return "$head | $label：$tiles$suffix (剩餘 ${best.acceptanceTiles} 張)"
+        return "$head | $stage | 進張機會：$tiles$suffix (剩餘 ${best.acceptanceTiles} 張)"
     }
 
     /** 第二行提示：最佳解很危險時，附上一個保守選項 */

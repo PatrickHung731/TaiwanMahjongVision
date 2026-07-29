@@ -66,9 +66,9 @@ data class HandAnalysis(
     /**
      * AR 覆蓋層用的單行提示，例如：
      * ```
-     * 建議丟牌：9條 | 聽牌進張：3筒, 6筒 (剩餘 5 張)
-     * 建議丟牌：1筒 | 1向聽進張：2筒, 3筒, 6筒 (剩餘 35 張)
-     * 聽牌！進張：3筒, 6筒 (剩餘 7 張)
+     * 建議丟牌：9條 | 聽牌 | 進張機會：3筒, 6筒 (剩餘 5 張)
+     * 建議丟牌：1筒 | 1步進聽 | 進張機會：2筒, 3筒, 6筒 (剩餘 35 張)
+     * 聽牌 | 進張機會：3筒, 6筒 (剩餘 7 張)
      * ```
      */
     fun overlayText(maxTiles: Int = 6): String {
@@ -76,13 +76,13 @@ data class HandAnalysis(
         val best = bestDiscard
         if (best != null) {
             val head = "建議丟牌：${best.discardName}"
-            if (best.acceptance.isEmpty()) return "$head | 無有效進張"
-            val label = if (best.isTenpai) "聽牌進張" else "${best.shantenAfter}向聽進張"
-            return "$head | $label：${tileList(best.acceptance, maxTiles)} (剩餘 ${best.acceptanceTiles} 張)"
+            val stage = if (best.isTenpai) "聽牌" else "${best.shantenAfter}步進聽"
+            if (best.acceptance.isEmpty()) return "$head | $stage | 無進張機會"
+            return "$head | $stage | 進張機會：${tileList(best.acceptance, maxTiles)} (剩餘 ${best.acceptanceTiles} 張)"
         }
-        if (acceptance.isEmpty()) return "${shanten}向聽 | 無有效進張"
-        val head = if (isTenpai) "聽牌！進張" else "${shanten}向聽 | 有效進張"
-        return "$head：${tileList(acceptance, maxTiles)} (剩餘 $acceptanceTiles 張)"
+        val stage = if (isTenpai) "聽牌" else "${shanten}步進聽"
+        if (acceptance.isEmpty()) return "$stage | 無進張機會"
+        return "$stage | 進張機會：${tileList(acceptance, maxTiles)} (剩餘 $acceptanceTiles 張)"
     }
 
     /** 開發/除錯用的多行摘要 */

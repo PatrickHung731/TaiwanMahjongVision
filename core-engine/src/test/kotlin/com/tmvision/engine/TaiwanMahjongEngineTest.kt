@@ -142,7 +142,7 @@ class TaiwanMahjongEngineTest {
 
         assertEquals(0, analysis.shanten)
         assertEquals(17, analysis.handSize)
-        assertEquals("建議丟牌：9條 | 聽牌進張：3筒, 6筒 (剩餘 5 張)", analysis.overlayText())
+        assertEquals("建議丟牌：9條 | 聽牌 | 進張機會：3筒, 6筒 (剩餘 5 張)", analysis.overlayText())
     }
 
     @Test
@@ -152,7 +152,7 @@ class TaiwanMahjongEngineTest {
 
         assertTrue(analysis.isTenpai)
         assertTrue(analysis.discardOptions.isEmpty(), "16 張不需要切牌")
-        assertEquals("聽牌！進張：3筒, 6筒 (剩餘 7 張)", analysis.overlayText())
+        assertEquals("聽牌 | 進張機會：3筒, 6筒 (剩餘 7 張)", analysis.overlayText())
     }
 
     @Test
@@ -161,7 +161,7 @@ class TaiwanMahjongEngineTest {
         val analysis = engine.analyze(hand)
 
         assertEquals(1, analysis.shanten)
-        assertContains(analysis.overlayText(), "1向聽")
+        assertContains(analysis.overlayText(), "1步進聽")
     }
 
     @Test
