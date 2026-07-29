@@ -1,0 +1,21 @@
+.gradle/
+build/
+local.properties
+*.iml
+.idea/
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.keystore
+!debug.keystore
+
+# 模型檔很大，不進版控（放在 app/src/main/assets/ 由本機提供）
+*.tflite
+*.onnx
+*.pt
+
+__pycache__/
+*.pyc

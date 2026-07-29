@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 實際配色由 Compose 的 MahjongTheme 決定，這裡只是啟動前的底色 -->
+    <style name="Theme.TaiwanMahjongVision" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">#1B5E20</item>
+    </style>
+</resources>

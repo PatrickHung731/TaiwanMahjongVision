@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  App 圖示：一張麻將牌上面一個「中」字。
+  純向量（不需要 PNG），所以整個專案不含任何二進位圖檔。
+  adaptive icon 的安全區是中央 66x66，內容都畫在裡面。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 牌面 -->
+    <path
+        android:fillColor="#FFF8E1"
+        android:pathData="M30,22 h48 v64 h-48 z" />
+
+    <!-- 中：外框 -->
+    <path
+        android:fillColor="#C62828"
+        android:pathData="M40,42 h28 v24 h-28 z" />
+
+    <!-- 中：內部挖空 -->
+    <path
+        android:fillColor="#FFF8E1"
+        android:pathData="M46,48 h16 v12 h-16 z" />
+
+    <!-- 中：中間那一豎 -->
+    <path
+        android:fillColor="#C62828"
+        android:pathData="M51,32 h6 v44 h-6 z" />
+</vector>
