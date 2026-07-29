@@ -161,7 +161,7 @@ class TaiwanMahjongEngineTest {
         val analysis = engine.analyze(hand)
 
         assertEquals(1, analysis.shanten)
-        assertContains(analysis.overlayText(), "1步進聽")
+        assertContains(analysis.overlayText(), "1進聽")
     }
 
     @Test

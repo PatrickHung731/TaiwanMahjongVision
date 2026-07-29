@@ -69,7 +69,7 @@ data class TableAdvice(
 
         val risk = if (hasOpponentInfo) " (放槍 ${best.riskPercent})" else ""
         val head = "建議丟牌：${best.discardName}$risk"
-        val stage = if (best.isTenpai) "聽牌" else "${best.shantenAfter}步進聽"
+        val stage = if (best.isTenpai) "聽牌" else "${best.shantenAfter}進聽"
         if (best.acceptance.isEmpty()) return "$head | $stage | 無進張機會"
         val tiles = best.acceptance.take(maxTiles).joinToString(", ") { it.name }
         val suffix = if (best.acceptance.size > maxTiles) "…等${best.acceptance.size}種" else ""

@@ -67,7 +67,7 @@ data class HandAnalysis(
      * AR 覆蓋層用的單行提示，例如：
      * ```
      * 建議丟牌：9條 | 聽牌 | 進張機會：3筒, 6筒 (剩餘 5 張)
-     * 建議丟牌：1筒 | 1步進聽 | 進張機會：2筒, 3筒, 6筒 (剩餘 35 張)
+     * 建議丟牌：1筒 | 1進聽 | 進張機會：2筒, 3筒, 6筒 (剩餘 35 張)
      * 聽牌 | 進張機會：3筒, 6筒 (剩餘 7 張)
      * ```
      */
@@ -76,11 +76,11 @@ data class HandAnalysis(
         val best = bestDiscard
         if (best != null) {
             val head = "建議丟牌：${best.discardName}"
-            val stage = if (best.isTenpai) "聽牌" else "${best.shantenAfter}步進聽"
+            val stage = if (best.isTenpai) "聽牌" else "${best.shantenAfter}進聽"
             if (best.acceptance.isEmpty()) return "$head | $stage | 無進張機會"
             return "$head | $stage | 進張機會：${tileList(best.acceptance, maxTiles)} (剩餘 ${best.acceptanceTiles} 張)"
         }
-        val stage = if (isTenpai) "聽牌" else "${shanten}步進聽"
+        val stage = if (isTenpai) "聽牌" else "${shanten}進聽"
         if (acceptance.isEmpty()) return "$stage | 無進張機會"
         return "$stage | 進張機會：${tileList(acceptance, maxTiles)} (剩餘 $acceptanceTiles 張)"
     }
