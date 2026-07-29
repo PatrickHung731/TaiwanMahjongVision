@@ -1,26 +1,56 @@
-Microsoft Windows [版本 10.0.26200.8875]
-(c) Microsoft Corporation. 著作權所有，並保留一切權利。
+name: Build APK
 
-C:\Users\user>git -C D:\TaiwanMahjongVision remote add origin https://github.com/PatrickHung731/TaiwanMahjongVision.git
+# 為什麼用 GitHub Actions 編譯：
+# 開發機沒有 JDK / Android SDK / Gradle，本機產不出 .apk。
+# 推上來之後這個 workflow 會在雲端編譯，完成後在 Actions 頁面下載 APK 直接裝。
 
-C:\Users\user>git -C D:\TaiwanMahjongVision push -u origin main
-remote: Repository not found.
-fatal: repository 'https://github.com/PatrickHung731/TaiwanMahjongVision.git/' not found
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:        # 也可以在 Actions 頁面手動按 Run
 
-C:\Users\user>git -C D:\TaiwanMahjongVision remote add origin https://github.com/PatrickHung731/TaiwanMahjongVision.git
-error: remote origin already exists.
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-C:\Users\user>git -C D:\TaiwanMahjongVision push -u origin main
-Enumerating objects: 87, done.
-Counting objects: 100% (87/87), done.
-Delta compression using up to 16 threads
-Compressing objects: 100% (66/66), done.
-Writing objects: 100% (87/87), 94.15 KiB | 5.54 MiB/s, done.
-Total 87 (delta 4), reused 0 (delta 0), pack-reused 0 (from 0)
-remote: Resolving deltas: 100% (4/4), done.
-To https://github.com/PatrickHung731/TaiwanMahjongVision.git
- ! [remote rejected] main -> main (refusing to allow a Personal Access Token to create or update workflow `.github/workflows/build-apk.yml` without `workflow` scope)
-error: failed to push some refs to 'https://github.com/PatrickHung731/TaiwanMahjongVision.git'
+    steps:
+      - name: 取得原始碼
+        uses: actions/checkout@v4
 
-C:\Users\user>
+      - name: 安裝 JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
 
+      - name: 準備 Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: 安裝 Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+
+      # 引擎的單元測試。演算法錯了就不該產出 APK。
+      - name: 跑演算法測試
+        run: gradle :core-engine:test --no-daemon --stacktrace
+
+      - name: 編譯 debug APK
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
+
+      - name: 上傳 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TaiwanMahjongVision-debug
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 30
+
+      # 測試失敗時，把報告一起帶出來比較好查
+      - name: 上傳測試報告
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: core-engine/build/reports/tests/
+          retention-days: 7
